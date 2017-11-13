@@ -1,0 +1,9 @@
+{
+    "plugins": ["transform-react-jsx"],
+    "presets": ["stage-2", "react", ["env", {
+                                        "targets": {
+                                            "browsers": ["last 2 Chrome versions"]
+                                        }
+                                    }]
+                ]
+}
