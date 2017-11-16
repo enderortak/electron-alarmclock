@@ -7,8 +7,8 @@ const
 
 export default class Content extends React.Component {
     render() {
-        return <div id="content-wrapper">
-            <div className="content">
+        return <div id="content-wrapper" className="flex-container">
+            <div className="content" className="flex-container">
                 {this.props.children}
             </div>
         </div>

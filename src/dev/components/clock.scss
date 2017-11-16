@@ -1,0 +1,13 @@
+.clock{
+    color: white;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    font-size: 3em;
+    -webkit-line-break: pre-line;
+    & > div > div{
+        padding: 1em;
+    }
+}

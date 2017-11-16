@@ -12,10 +12,10 @@ class Content extends React.Component {
     render() {
         return React.createElement(
             'div',
-            { id: 'content-wrapper' },
+            { id: 'content-wrapper', className: 'flex-container' },
             React.createElement(
                 'div',
-                { className: 'content' },
+                { className: 'content', className: 'flex-container' },
                 this.props.children
             )
         );

@@ -54,12 +54,26 @@ body * {
     font-size: 1.1em; }
 
 #content-wrapper {
+  padding: 1rem; }
+  #content-wrapper #content {
+    overflow: auto; }
+
+.flex-container {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: stretch;
   align-content: stretch;
-  flex: 1;
-  padding: 1rem; }
-  #content-wrapper #content {
-    overflow: auto; }
+  flex: 1; }
+
+.clock {
+  color: white;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  font-size: 3em;
+  -webkit-line-break: pre-line; }
+  .clock > div > div {
+    padding: 1em; }

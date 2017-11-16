@@ -1,11 +1,14 @@
-const
-React = require('react'),
-ReactDOM = require('react-dom'),
-TitleBar = require('./layout/titlebar').default,
-Content = require('./layout/content').default;
+import React from "react"
+import {render} from "react-dom"
+import TitleBar from "./layout/titlebar"
+import Content from "./layout/content"
+import ViewApp from "./components/ViewApp"
 
 
-ReactDOM.render(
-[<TitleBar key="titlebar"/>, <Content key="content"/>],
+render(
+[
+<TitleBar key="titlebar"/>, 
+<Content key="content"><ViewApp /></Content>
+],
     document.getElementById('root')
 );
