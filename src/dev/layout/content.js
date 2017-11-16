@@ -1,17 +1,18 @@
-const
-    React = require('react'),
-    ReactDOM = require('react-dom'),
-    remote = require("electron").remote,
-    ipc = require("electron").ipcRenderer;
+import React from "react";
+import propTypes from "prop-types";
 
 
-export default class Content extends React.Component {
-    render() {
-        return <div id="content-wrapper" className="flex-container">
-            <div className="content" className="flex-container">
-                {this.props.children}
-            </div>
-        </div>
+const Content = ({ children }) => (
+  <div id="content-wrapper" className="flex-container">
+    <div className="content flex-container">
+      {children}
+    </div>
+  </div>
+);
 
-    }
-}
+Content.propTypes = {
+  children: propTypes.node.isRequired,
+};
+
+export default Content;
+
