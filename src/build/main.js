@@ -20,8 +20,12 @@ var _ViewApp2 = _interopRequireDefault(_ViewApp);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// const electron = window.require('electron');
+// const remote = electron.remote;
+// console.log(remote.process.env.TZ);
+
 (0, _reactDom.render)([_react2.default.createElement(_titlebar2.default, { key: "titlebar" }), _react2.default.createElement(
-    _content2.default,
-    { key: "content" },
-    _react2.default.createElement(_ViewApp2.default, null)
+  _content2.default,
+  { key: "content" },
+  _react2.default.createElement(_ViewApp2.default, null)
 )], document.getElementById('root'));

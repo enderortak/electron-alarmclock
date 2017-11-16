@@ -28,8 +28,12 @@ const alarm = (state = alamInitState, action) => {
         state: action.state,
       };
     case SNOOZE_ALARM: {
-      const snoozeTimeRange = calculateSnoozeTimeRange(state.time, state.maxTime, 3, 5, moment());
-      const snoozeZone = calculateSnoozeZone(state.time, state.maxTime, 5);
+      const snoozeZoneLevel = 5;
+      const snoozeTimeRangeDenominator = 3;
+      const snoozeZone = calculateSnoozeZone(state.time, state.maxTime, snoozeZoneLevel, moment());
+      const snoozeTimeRange =
+        calculateSnoozeTimeRange(state.time, state.maxTime, snoozeTimeRangeDenominator, snoozeZone);
+
       return {
         ...state,
         state: ALARM_STATE.SNOOZED,

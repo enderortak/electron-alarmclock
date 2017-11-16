@@ -1,83 +1,85 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-const React = require('react'),
-      ReactDOM = require('react-dom'),
-      remote = require("electron").remote,
-      ipc = require("electron").ipcRenderer;
 
-class TitleBar extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            maximizeRestoreButton: "maximize"
-        };
+var _react = require("react");
 
-        this.handleMaximizeRestore = this.handleMaximizeRestore.bind(this);
-    }
-    componentDidMount() {
-        ipc.on("maximize", e => {
-            this.setState({
-                maximizeRestoreButton: "restore"
-            });
-        });
+var _react2 = _interopRequireDefault(_react);
 
-        ipc.on("restore", e => {
-            this.setState({
-                maximizeRestoreButton: "maximize"
-            });
-        });
-    }
-    window() {
-        return remote.getCurrentWindow();
-    }
-    handleMaximizeRestore() {
-        if (this.window().isMaximized()) this.window().restore();else this.window().maximize();
+var _electron = require("electron");
 
-        this.setState((prevState, props) => {
-            return { maximizeRestoreButton: prevState.maximizeRestoreButton === "maximize" ? "restore" : "maximize" };
-        });
-    }
-    render() {
-        return React.createElement(
-            'div',
-            { id: 'titlebar' },
-            React.createElement(
-                'div',
-                { id: 'titlebar-windowtitle' },
-                React.createElement(
-                    'div',
-                    null,
-                    React.createElement('i', { className: 'fa fa-github fa-lg', 'aria-hidden': 'true' })
-                ),
-                React.createElement(
-                    'div',
-                    null,
-                    'This is window title!'
-                )
-            ),
-            React.createElement(
-                'div',
-                { id: 'titlebar-actions' },
-                React.createElement(
-                    'div',
-                    { id: 'minimize-window', onClick: () => this.window().minimize() },
-                    React.createElement('i', { className: 'fa fa-window-minimize', 'aria-hidden': 'true' })
-                ),
-                React.createElement(
-                    'div',
-                    { id: 'maximize-window', onClick: this.handleMaximizeRestore },
-                    React.createElement('i', { className: `fa fa-window-${this.state.maximizeRestoreButton}`, 'aria-hidden': 'true' })
-                ),
-                React.createElement(
-                    'div',
-                    { id: 'close-window', onClick: () => this.window().close() },
-                    React.createElement('i', { className: 'fa fa-times fa-lg', 'aria-hidden': 'true' })
-                )
-            )
-        );
-    }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const window = () => _electron.remote.getCurrentWindow();
+
+class TitleBar extends _react2.default.Component {
+  constructor() {
+    super();
+    this.state = {
+      maximizeRestoreButton: "maximize"
+    };
+
+    this.handleMaximizeRestore = this.handleMaximizeRestore.bind(this);
+  }
+  componentDidMount() {
+    _electron.ipcRenderer.on("maximize", () => {
+      this.setState({
+        maximizeRestoreButton: "restore"
+      });
+    });
+
+    _electron.ipcRenderer.on("restore", () => {
+      this.setState({
+        maximizeRestoreButton: "maximize"
+      });
+    });
+  }
+
+  handleMaximizeRestore() {
+    if (window().isMaximized()) window().restore();else window().maximize();
+
+    this.setState(prevState => ({ maximizeRestoreButton: prevState.maximizeRestoreButton === "maximize" ? "restore" : "maximize" }));
+  }
+  render() {
+    return _react2.default.createElement(
+      "div",
+      { id: "titlebar" },
+      _react2.default.createElement(
+        "div",
+        { id: "titlebar-windowtitle" },
+        _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement("i", { className: "fa fa-github fa-lg", "aria-hidden": "true" })
+        ),
+        _react2.default.createElement(
+          "div",
+          null,
+          "This is window title!"
+        )
+      ),
+      _react2.default.createElement(
+        "div",
+        { id: "titlebar-actions" },
+        _react2.default.createElement(
+          "div",
+          { id: "minimize-window", onClick: () => window().minimize() },
+          _react2.default.createElement("i", { className: "fa fa-window-minimize", "aria-hidden": "true" })
+        ),
+        _react2.default.createElement(
+          "div",
+          { id: "maximize-window", onClick: this.handleMaximizeRestore },
+          _react2.default.createElement("i", { className: `fa fa-window-${this.state.maximizeRestoreButton}`, "aria-hidden": "true" })
+        ),
+        _react2.default.createElement(
+          "div",
+          { id: "close-window", onClick: () => window().close() },
+          _react2.default.createElement("i", { className: "fa fa-times fa-lg", "aria-hidden": "true" })
+        )
+      )
+    );
+  }
 }
 exports.default = TitleBar;
