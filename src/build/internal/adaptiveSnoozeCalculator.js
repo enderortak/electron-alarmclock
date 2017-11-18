@@ -1,20 +1,19 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-const calculateSnoozeZone = exports.calculateSnoozeZone = (alarmTime, maxTime, numberOfLevels, actualTime) => {
-  const snoozeChangeRange = maxTime.diff(alarmTime);
+const calculateSnoozeZone = (alarmTime, snoozeRange, numberOfLevels, actualTime) => {
   let level = 1;
-  alarmTime.add(snoozeChangeRange / numberOfLevels);
-  while (level < numberOfLevels && actualTime.isAfter(alarmTime)) {
+  const _alarmTime = alarmTime.clone();
+  _alarmTime.add(snoozeRange / numberOfLevels);
+  while (level < numberOfLevels && actualTime.isAfter(_alarmTime.clone().add(-1000))) {
     level += 1;
-    alarmTime.add(snoozeChangeRange / numberOfLevels);
+    _alarmTime.add(snoozeRange / numberOfLevels);
   }
   return level;
 };
-const calculateSnoozeTimeRange = exports.calculateSnoozeTimeRange = (alarmTime, maxTime, denominator, zone) => {
-  const snoozeChangeRange = maxTime.diff(alarmTime);
-  const adaptiveSnoozeTimeRange = snoozeChangeRange / denominator;
+const calculateSnoozeTimeSpan = (snoozeRange, denominator, zone) => {
+  const adaptiveSnoozeTimeRange = snoozeRange / denominator;
   return adaptiveSnoozeTimeRange / zone;
 };
+
+module.exports.calculateSnoozeZone = calculateSnoozeZone;
+module.exports.calculateSnoozeTimeSpan = calculateSnoozeTimeSpan;

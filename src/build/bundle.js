@@ -18419,7 +18419,6 @@
 	      });
 	    });
 	  }
-
 	  handleMaximizeRestore() {
 	    if (window().isMaximized()) window().restore();else window().maximize();
 
@@ -37810,16 +37809,17 @@
 	      });
 	    case _collection.SNOOZE_ALARM:
 	      {
-	        const snoozeZoneLevel = 5;
-	        const snoozeTimeRangeDenominator = 3;
-	        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.time, state.maxTime, snoozeZoneLevel, (0, _moment2.default)());
-	        const snoozeTimeRange = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeRange)(state.time, state.maxTime, snoozeTimeRangeDenominator, snoozeZone);
+	        const snoozeRange = state.maxTime.diff(state.time); // snooze timespan varying range
+	        const snoozeZoneLevel = 5; // number of variations for snooze timespan
+	        const snoozeRangeDenominator = 3; // denominator to determine maximum snooze timespan
+	        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.time, snoozeRange, snoozeZoneLevel, (0, _moment2.default)());
+	        const snoozeTimeSpan = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeSpan)(state.time, snoozeRangeDenominator, snoozeZone);
 
 	        return _extends({}, state, {
 	          state: _collection.ALARM_STATE.SNOOZED,
-	          snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeRange),
+	          snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeSpan),
 	          snoozeLevel: action.time ? 0 : snoozeZone,
-	          snoozeTimeSpan: action.time ? action.time.diff((0, _moment2.default)()) : snoozeTimeRange,
+	          snoozeTimeSpan: action.time ? action.time.diff((0, _moment2.default)()) : snoozeTimeSpan,
 	          snoozes: [...state.snoozes, {
 	            snoozeTime: (0, _moment2.default)(),
 	            snoozeSetTime: action.time
@@ -37839,24 +37839,23 @@
 
 	"use strict";
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	const calculateSnoozeZone = exports.calculateSnoozeZone = (alarmTime, maxTime, numberOfLevels, actualTime) => {
-	  const snoozeChangeRange = maxTime.diff(alarmTime);
+	const calculateSnoozeZone = (alarmTime, snoozeRange, numberOfLevels, actualTime) => {
 	  let level = 1;
-	  alarmTime.add(snoozeChangeRange / numberOfLevels);
-	  while (level < numberOfLevels && actualTime.isAfter(alarmTime)) {
+	  const _alarmTime = alarmTime.clone();
+	  _alarmTime.add(snoozeRange / numberOfLevels);
+	  while (level < numberOfLevels && actualTime.isAfter(_alarmTime.clone().add(-1000))) {
 	    level += 1;
-	    alarmTime.add(snoozeChangeRange / numberOfLevels);
+	    _alarmTime.add(snoozeRange / numberOfLevels);
 	  }
 	  return level;
 	};
-	const calculateSnoozeTimeRange = exports.calculateSnoozeTimeRange = (alarmTime, maxTime, denominator, zone) => {
-	  const snoozeChangeRange = maxTime.diff(alarmTime);
-	  const adaptiveSnoozeTimeRange = snoozeChangeRange / denominator;
+	const calculateSnoozeTimeSpan = (snoozeRange, denominator, zone) => {
+	  const adaptiveSnoozeTimeRange = snoozeRange / denominator;
 	  return adaptiveSnoozeTimeRange / zone;
 	};
+
+	module.exports.calculateSnoozeZone = calculateSnoozeZone;
+	module.exports.calculateSnoozeTimeSpan = calculateSnoozeTimeSpan;
 
 /***/ }),
 /* 196 */
@@ -37912,7 +37911,7 @@
 	// const alarmMaxTime = moment().add(30, "seconds")
 	// const alarmSnooze = 1;
 
-	const alarmSetTime = (0, _moment2.default)("2017-11-16").add(7, "hours").add(15, "minutes");
+	const alarmSetTime = (0, _moment2.default)().add(5, "seconds");
 	const alarmMaxTime = (0, _moment2.default)("2017-11-16").add(7, "hours").add(45, "minutes");
 	const alarmSnooze = 5;
 

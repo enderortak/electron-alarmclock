@@ -25,7 +25,6 @@ export default class TitleBar extends React.Component {
       });
     });
   }
-
   handleMaximizeRestore() {
     if (window().isMaximized()) window().restore();
     else window().maximize();

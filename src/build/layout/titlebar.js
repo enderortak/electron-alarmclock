@@ -36,7 +36,6 @@ class TitleBar extends _react2.default.Component {
       });
     });
   }
-
   handleMaximizeRestore() {
     if (window().isMaximized()) window().restore();else window().maximize();
 

@@ -41,16 +41,17 @@ const alarm = (state = alamInitState, action) => {
       });
     case _collection.SNOOZE_ALARM:
       {
-        const snoozeZoneLevel = 5;
-        const snoozeTimeRangeDenominator = 3;
-        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.time, state.maxTime, snoozeZoneLevel, (0, _moment2.default)());
-        const snoozeTimeRange = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeRange)(state.time, state.maxTime, snoozeTimeRangeDenominator, snoozeZone);
+        const snoozeRange = state.maxTime.diff(state.time); // snooze timespan varying range
+        const snoozeZoneLevel = 5; // number of variations for snooze timespan
+        const snoozeRangeDenominator = 3; // denominator to determine maximum snooze timespan
+        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.time, snoozeRange, snoozeZoneLevel, (0, _moment2.default)());
+        const snoozeTimeSpan = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeSpan)(state.time, snoozeRangeDenominator, snoozeZone);
 
         return _extends({}, state, {
           state: _collection.ALARM_STATE.SNOOZED,
-          snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeRange),
+          snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeSpan),
           snoozeLevel: action.time ? 0 : snoozeZone,
-          snoozeTimeSpan: action.time ? action.time.diff((0, _moment2.default)()) : snoozeTimeRange,
+          snoozeTimeSpan: action.time ? action.time.diff((0, _moment2.default)()) : snoozeTimeSpan,
           snoozes: [...state.snoozes, {
             snoozeTime: (0, _moment2.default)(),
             snoozeSetTime: action.time
