@@ -9,8 +9,8 @@ import { clockTick, setAlarmTime, snoozeAlarm, ALARM_STATE } from "../actions/_c
 // const alarmMaxTime = moment().add(30, "seconds")
 // const alarmSnooze = 1;
 
-const alarmSetTime = moment().add(5, "seconds");
-const alarmMaxTime = moment("2017-11-16").add(7, "hours").add(45, "minutes");
+const alarmSetTime = moment("2017-11-20").add(7, "hours").add(15, "minutes");
+const alarmMaxTime = moment("2017-11-20").add(7, "hours").add(45, "minutes");
 const alarmSnooze = 5;
 
 

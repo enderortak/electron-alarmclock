@@ -51,7 +51,7 @@ const alarm = (state = alamInitState, action) => {
           state: _collection.ALARM_STATE.SNOOZED,
           snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeSpan),
           snoozeLevel: action.time ? 0 : snoozeZone,
-          snoozeTimeSpan: action.time ? action.time.diff((0, _moment2.default)()) : snoozeTimeSpan,
+          snoozeTimeSpan: action.time.diff((0, _moment2.default)()) ? action.time.diff((0, _moment2.default)()) : snoozeTimeSpan,
           snoozes: [...state.snoozes, {
             snoozeTime: (0, _moment2.default)(),
             snoozeSetTime: action.time
