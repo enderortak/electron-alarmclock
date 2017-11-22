@@ -37979,11 +37979,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// const alarmSetTime = moment().add(5, "seconds")
-	// const alarmMaxTime = moment().add(30, "seconds")
-	// const alarmSnooze = 1;
-
-
 	class Clock extends _react2.default.Component {
 	  componentDidMount() {
 	    this.props.clockStart();
