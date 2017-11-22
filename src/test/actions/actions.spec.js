@@ -3,7 +3,7 @@ const { expect } = require("chai");
 
 const {
   CLOCK_TICK, clockTick, SET_ALARM_STATE, setAlarmState,
-  SET_ALARM_TIME, setAlarmTime, SNOOZE_ALARM, snoozeAlarm, ALARM_STATE,
+  SET_ALARM_TIME, setalarmSetTime, SNOOZE_ALARM, snoozeAlarm, ALARM_STATE,
 } = require("../../build/actions/_collection");
 
 describe("Redux actions", () => {

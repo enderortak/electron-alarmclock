@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 var _collection = require("../actions/_collection");
 
 const alarmStateSubsciber = (state, dispatch) => {
-  const shouldSetAlarmOn = state.alarm.time && state.alarm.state === _collection.ALARM_STATE.WAITING && state.time.isAfter(state.alarm.time) || state.alarm.snoozeTime && state.alarm.state === _collection.ALARM_STATE.SNOOZED && state.time.isAfter(state.alarm.snoozeTime);
+  const shouldSetAlarmOn = state.alarm.alarmSetTime && state.alarm.state === _collection.ALARM_STATE.WAITING && state.time.isAfter(state.alarm.alarmSetTime) || state.alarm.snoozeSetTime && state.alarm.state === _collection.ALARM_STATE.SNOOZED && state.time.isAfter(state.alarm.snoozeSetTime);
 
   if (shouldSetAlarmOn) dispatch((0, _collection.setAlarmState)(_collection.ALARM_STATE.ON));
 };

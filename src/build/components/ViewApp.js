@@ -20,7 +20,7 @@ var _collection3 = require("../subscriptions/_collection");
 
 var _collection4 = _interopRequireDefault(_collection3);
 
-var _Clock = require("../components/Clock");
+var _Clock = require("../containers/Clock");
 
 var _Clock2 = _interopRequireDefault(_Clock);
 

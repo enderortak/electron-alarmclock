@@ -10,9 +10,9 @@ const verbose = false;
 describe("Adaptive snooze calculation", () => {
   snapshots.forEach((snapshot) => {
     it(snapshot.name, () => {
-      const snoozeRange = snapshot.maxTime.diff(snapshot.alarmTime);
+      const snoozeRange = snapshot.maxTime.diff(snapshot.alarmSetTime);
       const zone = calculateSnoozeZone(
-        snapshot.alarmTime,
+        snapshot.alarmSetTime,
         snoozeRange,
         snapshot.numberOfLevels,
         snapshot.actualTime,

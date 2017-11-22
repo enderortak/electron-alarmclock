@@ -6,11 +6,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = require("react-dom");
 
-var _titlebar = require("./layout/titlebar");
+var _titlebar = require("./components/layout/titlebar");
 
 var _titlebar2 = _interopRequireDefault(_titlebar);
 
-var _content = require("./layout/content");
+var _content = require("./components/layout/content");
 
 var _content2 = _interopRequireDefault(_content);
 

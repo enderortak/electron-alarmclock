@@ -37759,8 +37759,8 @@
 
 	const clockTick = exports.clockTick = () => ({ type: CLOCK_TICK });
 	const setAlarmState = exports.setAlarmState = state => ({ type: SET_ALARM_STATE, state });
-	const setAlarmTime = exports.setAlarmTime = (time, maxTime) => ({ type: SET_ALARM_TIME, time, maxTime });
-	const snoozeAlarm = exports.snoozeAlarm = time => ({ type: SNOOZE_ALARM, time });
+	const setalarmSetTime = exports.setalarmSetTime = (alarmSetTime, maxTime) => ({ type: SET_ALARM_TIME, alarmSetTime, maxTime });
+	const snoozeAlarm = exports.snoozeAlarm = (actualTime, snoozeSetTime) => ({ type: SNOOZE_ALARM, snoozeSetTime, actualTime });
 
 /***/ }),
 /* 194 */
@@ -37786,9 +37786,9 @@
 
 	const alamInitState = {
 	  active: false,
-	  time: null,
+	  alarmSetTime: null,
 	  maxTime: null,
-	  snoozeTime: null,
+	  snoozeSetTime: null,
 	  state: _collection.ALARM_STATE.OFF,
 	  snoozes: []
 	};
@@ -37799,7 +37799,7 @@
 	      return {
 	        state: _collection.ALARM_STATE.WAITING,
 	        active: true,
-	        time: action.time,
+	        alarmSetTime: action.alarmSetTime,
 	        maxTime: action.maxTime,
 	        snoozes: []
 	      };
@@ -37809,20 +37809,20 @@
 	      });
 	    case _collection.SNOOZE_ALARM:
 	      {
-	        const snoozeRange = state.maxTime.diff(state.time); // snooze timespan varying range
+	        const snoozeRange = state.maxTime.diff(state.alarmSetTime); // snooze timespan varying range
 	        const snoozeZoneLevel = 5; // number of variations for snooze timespan
 	        const snoozeRangeDenominator = 3; // denominator to determine maximum snooze timespan
-	        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.time, snoozeRange, snoozeZoneLevel, (0, _moment2.default)());
-	        const snoozeTimeSpan = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeSpan)(state.time, snoozeRangeDenominator, snoozeZone);
+	        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.alarmSetTime, snoozeRange, snoozeZoneLevel, action.actualTime);
+	        const snoozeTimeSpan = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeSpan)(snoozeRange, snoozeRangeDenominator, snoozeZone);
 
 	        return _extends({}, state, {
 	          state: _collection.ALARM_STATE.SNOOZED,
-	          snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeSpan),
-	          snoozeLevel: action.time ? 0 : snoozeZone,
-	          snoozeTimeSpan: action.time.diff((0, _moment2.default)()) ? action.time.diff((0, _moment2.default)()) : snoozeTimeSpan,
+	          snoozeSetTime: action.snoozeSetTime ? action.snoozeSetTime : action.actualTime.clone().add(snoozeTimeSpan),
+	          snoozeLevel: action.snoozeSetTime ? 0 : snoozeZone,
+	          snoozeTimeSpan: action.snoozeSetTime ? action.snoozeSetTime.diff(action.actualTime) : snoozeTimeSpan,
 	          snoozes: [...state.snoozes, {
-	            snoozeTime: (0, _moment2.default)(),
-	            snoozeSetTime: action.time
+	            snoozeTime: action.actualTime,
+	            snoozeSetTime: action.snoozeSetTime ? action.snoozeSetTime : action.actualTime.clone().add(snoozeTimeSpan)
 	          }]
 	        });
 	      }
@@ -37839,13 +37839,13 @@
 
 	"use strict";
 
-	const calculateSnoozeZone = (alarmTime, snoozeRange, numberOfLevels, actualTime) => {
+	const calculateSnoozeZone = (alarmSetTime, snoozeRange, numberOfLevels, actualTime) => {
 	  let level = 1;
-	  const _alarmTime = alarmTime.clone();
-	  _alarmTime.add(snoozeRange / numberOfLevels);
-	  while (level < numberOfLevels && actualTime.isAfter(_alarmTime.clone().add(-1000))) {
+	  const _alarmSetTime = alarmSetTime.clone();
+	  _alarmSetTime.add(snoozeRange / numberOfLevels);
+	  while (level < numberOfLevels && actualTime.isAfter(_alarmSetTime.clone().add(-1000))) {
 	    level += 1;
-	    _alarmTime.add(snoozeRange / numberOfLevels);
+	    _alarmSetTime.add(snoozeRange / numberOfLevels);
 	  }
 	  return level;
 	};
@@ -37870,7 +37870,7 @@
 	var _collection = __webpack_require__(193);
 
 	const alarmStateSubsciber = (state, dispatch) => {
-	  const shouldSetAlarmOn = state.alarm.time && state.alarm.state === _collection.ALARM_STATE.WAITING && state.time.isAfter(state.alarm.time) || state.alarm.snoozeTime && state.alarm.state === _collection.ALARM_STATE.SNOOZED && state.time.isAfter(state.alarm.snoozeTime);
+	  const shouldSetAlarmOn = state.alarm.alarmSetTime && state.alarm.state === _collection.ALARM_STATE.WAITING && state.time.isAfter(state.alarm.alarmSetTime) || state.alarm.snoozeSetTime && state.alarm.state === _collection.ALARM_STATE.SNOOZED && state.time.isAfter(state.alarm.snoozeSetTime);
 
 	  if (shouldSetAlarmOn) dispatch((0, _collection.setAlarmState)(_collection.ALARM_STATE.ON));
 	};
@@ -37889,6 +37889,84 @@
 	  value: true
 	});
 
+	var _moment = __webpack_require__(73);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _reactRedux = __webpack_require__(54);
+
+	var _collection = __webpack_require__(193);
+
+	var _Clock = __webpack_require__(198);
+
+	var _Clock2 = _interopRequireDefault(_Clock);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	const alarmSetTime = (0, _moment2.default)("2017-11-23").add(7, "hours").add(15, "minutes");
+	const alarmMaxTime = (0, _moment2.default)("2017-11-23").add(7, "hours").add(45, "minutes");
+	const alarmSnooze = null;
+
+	// const alarmSetTime = moment().clone().add(5, "seconds");
+	// const alarmMaxTime = moment().clone().add(35, "seconds");
+	// const alarmSnooze = undefined;
+
+	const alarmSetTimeDisplay = state => {
+	  if (state.alarm.alarmSetTime) {
+	    switch (state.alarm.state) {
+	      case _collection.ALARM_STATE.OFF:
+	        return "Alarm turned off";
+	      case _collection.ALARM_STATE.ON:
+	        return "Wake up!!!";
+	      case _collection.ALARM_STATE.WAITING:
+	        return `Alarm time: ${state.alarm.alarmSetTime.format("DD.MM.YYYY HH:mm:ss")}`;
+	      case _collection.ALARM_STATE.SNOOZED:
+	        return `Alarm time: ${state.alarm.alarmSetTime.format("DD.MM.YYYY HH:mm:ss")}, Snoozed until: ${state.alarm.snoozeSetTime.format("DD.MM.YYYY HH:mm:ss")}`;
+	      default:
+	        return "";
+	    }
+	  } else return "Alarm not set";
+	};
+
+	const mapStateToProps = state => ({
+	  timeDisplay: state.time.format("DD.MM.YYYY HH:mm:ss"),
+	  alarmSetTimeDisplay: alarmSetTimeDisplay(state),
+	  alarmState: state.alarm.state
+	});
+
+	const mapDispatchToProps = dispatch => {
+	  let intervalId;
+	  dispatch((0, _collection.setalarmSetTime)(alarmSetTime, alarmMaxTime));
+	  return {
+	    clockStart: () => {
+	      intervalId = setInterval(() => {
+	        dispatch((0, _collection.clockTick)());
+	      }, 100);
+	    },
+	    clockStop: () => {
+	      clearInterval(intervalId);
+	    },
+	    // snoozeAlarm: () => { dispatch(snoozeAlarm(moment().add(5, "minutes"))); }
+	    snoozeAlarm: () => {
+	      dispatch((0, _collection.snoozeAlarm)((0, _moment2.default)(), alarmSnooze ? (0, _moment2.default)().clone().add(alarmSnooze, "minutes") : null));
+	    }
+	  };
+	};
+
+	const ClockContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Clock2.default);
+
+	exports.default = ClockContainer;
+
+/***/ }),
+/* 198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -37896,12 +37974,6 @@
 	var _propTypes = __webpack_require__(29);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	var _reactRedux = __webpack_require__(54);
-
-	var _moment = __webpack_require__(73);
-
-	var _moment2 = _interopRequireDefault(_moment);
 
 	var _collection = __webpack_require__(193);
 
@@ -37911,9 +37983,6 @@
 	// const alarmMaxTime = moment().add(30, "seconds")
 	// const alarmSnooze = 1;
 
-	const alarmSetTime = (0, _moment2.default)("2017-11-20").add(7, "hours").add(15, "minutes");
-	const alarmMaxTime = (0, _moment2.default)("2017-11-20").add(7, "hours").add(45, "minutes");
-	const alarmSnooze = 5;
 
 	class Clock extends _react2.default.Component {
 	  componentDidMount() {
@@ -37946,7 +38015,7 @@
 	        _react2.default.createElement(
 	          "div",
 	          null,
-	          this.props.alarmTimeDisplay
+	          this.props.alarmSetTimeDisplay
 	        ),
 	        _react2.default.createElement("br", null),
 	        _react2.default.createElement(
@@ -37965,51 +38034,11 @@
 	  clockStop: _propTypes2.default.func.isRequired,
 	  alarmState: _propTypes2.default.string.isRequired,
 	  snoozeAlarm: _propTypes2.default.func.isRequired,
-	  alarmTimeDisplay: _propTypes2.default.string.isRequired,
+	  alarmSetTimeDisplay: _propTypes2.default.string.isRequired,
 	  timeDisplay: _propTypes2.default.string.isRequired
 	};
 
-	const mapDispatchToProps = dispatch => {
-	  let intervalId;
-	  dispatch((0, _collection.setAlarmTime)(alarmSetTime, alarmMaxTime));
-	  return {
-	    clockStart: () => {
-	      intervalId = setInterval(() => {
-	        dispatch((0, _collection.clockTick)());
-	      }, 100);
-	    },
-	    clockStop: () => {
-	      clearInterval(intervalId);
-	    },
-	    // snoozeAlarm: () => { dispatch(snoozeAlarm(moment().add(5, "minutes"))); }
-	    snoozeAlarm: () => {
-	      dispatch((0, _collection.snoozeAlarm)((0, _moment2.default)().add(alarmSnooze, "minutes")));
-	    }
-	  };
-	};
-	const alarmTimeDisplay = state => {
-	  if (state.alarm.time) {
-	    switch (state.alarm.state) {
-	      case _collection.ALARM_STATE.OFF:
-	        return "Alarm turned off";
-	      case _collection.ALARM_STATE.ON:
-	        return "Wake up!!!";
-	      case _collection.ALARM_STATE.WAITING:
-	        return `Alarm time: ${state.alarm.time.format("DD.MM.YYYY HH:mm:ss")}`;
-	      case _collection.ALARM_STATE.SNOOZED:
-	        return `Alarm time: ${state.alarm.time.format("DD.MM.YYYY HH:mm:ss")}, Snoozed until: ${state.alarm.snoozeTime.format("DD.MM.YYYY HH:mm:ss")}`;
-	      default:
-	        return "";
-	    }
-	  } else return "Alarm not set";
-	};
-	const ClockContainer = (0, _reactRedux.connect)(state => ({
-	  timeDisplay: state.time.format("DD.MM.YYYY HH:mm:ss"),
-	  alarmTimeDisplay: alarmTimeDisplay(state),
-	  alarmState: state.alarm.state
-	}), mapDispatchToProps)(Clock);
-
-	exports.default = ClockContainer;
+	exports.default = Clock;
 
 /***/ })
 /******/ ]);

@@ -18,9 +18,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const alamInitState = {
   active: false,
-  time: null,
+  alarmSetTime: null,
   maxTime: null,
-  snoozeTime: null,
+  snoozeSetTime: null,
   state: _collection.ALARM_STATE.OFF,
   snoozes: []
 };
@@ -31,7 +31,7 @@ const alarm = (state = alamInitState, action) => {
       return {
         state: _collection.ALARM_STATE.WAITING,
         active: true,
-        time: action.time,
+        alarmSetTime: action.alarmSetTime,
         maxTime: action.maxTime,
         snoozes: []
       };
@@ -41,20 +41,20 @@ const alarm = (state = alamInitState, action) => {
       });
     case _collection.SNOOZE_ALARM:
       {
-        const snoozeRange = state.maxTime.diff(state.time); // snooze timespan varying range
+        const snoozeRange = state.maxTime.diff(state.alarmSetTime); // snooze timespan varying range
         const snoozeZoneLevel = 5; // number of variations for snooze timespan
         const snoozeRangeDenominator = 3; // denominator to determine maximum snooze timespan
-        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.time, snoozeRange, snoozeZoneLevel, (0, _moment2.default)());
-        const snoozeTimeSpan = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeSpan)(state.time, snoozeRangeDenominator, snoozeZone);
+        const snoozeZone = (0, _adaptiveSnoozeCalculator.calculateSnoozeZone)(state.alarmSetTime, snoozeRange, snoozeZoneLevel, action.actualTime);
+        const snoozeTimeSpan = (0, _adaptiveSnoozeCalculator.calculateSnoozeTimeSpan)(snoozeRange, snoozeRangeDenominator, snoozeZone);
 
         return _extends({}, state, {
           state: _collection.ALARM_STATE.SNOOZED,
-          snoozeTime: action.time ? action.time : (0, _moment2.default)().add(snoozeTimeSpan),
-          snoozeLevel: action.time ? 0 : snoozeZone,
-          snoozeTimeSpan: action.time.diff((0, _moment2.default)()) ? action.time.diff((0, _moment2.default)()) : snoozeTimeSpan,
+          snoozeSetTime: action.snoozeSetTime ? action.snoozeSetTime : action.actualTime.clone().add(snoozeTimeSpan),
+          snoozeLevel: action.snoozeSetTime ? 0 : snoozeZone,
+          snoozeTimeSpan: action.snoozeSetTime ? action.snoozeSetTime.diff(action.actualTime) : snoozeTimeSpan,
           snoozes: [...state.snoozes, {
-            snoozeTime: (0, _moment2.default)(),
-            snoozeSetTime: action.time
+            snoozeTime: action.actualTime,
+            snoozeSetTime: action.snoozeSetTime ? action.snoozeSetTime : action.actualTime.clone().add(snoozeTimeSpan)
           }]
         });
       }

@@ -6,7 +6,7 @@ require("moment-duration-format");
 const snapshots = [
   {
     name: "should be able to handle a in-range situations",
-    alarmTime: moment(refTime).add(moment.duration("07:20:00")),
+    alarmSetTime: moment(refTime).add(moment.duration("07:20:00")),
     actualTime: moment(refTime).add(moment.duration("07:30:00")),
     maxTime: moment(refTime).add(moment.duration("07:50:00")),
     numberOfLevels: 5,
@@ -18,7 +18,7 @@ const snapshots = [
   },
   {
     name: "should be able to handle a zone-changer point situation",
-    alarmTime: moment(refTime).add(moment.duration("07:20:00")),
+    alarmSetTime: moment(refTime).add(moment.duration("07:20:00")),
     actualTime: moment(refTime).add(moment.duration("07:32:00")),
     maxTime: moment(refTime).add(moment.duration("07:50:00")),
     numberOfLevels: 5,
@@ -30,7 +30,7 @@ const snapshots = [
   },
   {
     name: "should be able to handle the max-time point situation",
-    alarmTime: moment(refTime).add(moment.duration("07:20:00")),
+    alarmSetTime: moment(refTime).add(moment.duration("07:20:00")),
     actualTime: moment(refTime).add(moment.duration("07:50:00")),
     maxTime: moment(refTime).add(moment.duration("07:50:00")),
     numberOfLevels: 5,
@@ -42,7 +42,7 @@ const snapshots = [
   },
   {
     name: "should be able to handle a after-max-time point situation",
-    alarmTime: moment(refTime).add(moment.duration("07:20:00")),
+    alarmSetTime: moment(refTime).add(moment.duration("07:20:00")),
     actualTime: moment(refTime).add(moment.duration("07:55:00")),
     maxTime: moment(refTime).add(moment.duration("07:50:00")),
     numberOfLevels: 5,

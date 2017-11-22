@@ -18,7 +18,7 @@ body *{
     align-content: stretch;
 }
 
-@import 'layout/titlebar.scss';
-@import 'layout/content.scss';
+@import 'components/layout/titlebar.scss';
+@import 'components/layout/content.scss';
 @import 'components/clock.scss';
 @import 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css';

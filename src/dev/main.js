@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
-import TitleBar from "./layout/titlebar";
-import Content from "./layout/content";
+import TitleBar from "./components/layout/titlebar";
+import Content from "./components/layout/content";
 import ViewApp from "./components/ViewApp";
 
 // const electron = window.require('electron');

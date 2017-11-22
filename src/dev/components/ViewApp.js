@@ -3,7 +3,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducerCollection from "../reducers/_collection";
 import subscriptionCollection from "../subscriptions/_collection";
-import Clock from "../components/Clock";
+import Clock from "../containers/Clock";
 
 const store = createStore(reducerCollection);
 
