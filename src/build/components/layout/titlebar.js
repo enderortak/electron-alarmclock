@@ -51,12 +51,12 @@ class TitleBar extends _react2.default.Component {
         _react2.default.createElement(
           "div",
           null,
-          _react2.default.createElement("i", { className: "fa fa-github fa-lg", "aria-hidden": "true" })
+          _react2.default.createElement("i", { className: "fa fa-clock-o fa-lg", "aria-hidden": "true" })
         ),
         _react2.default.createElement(
           "div",
           null,
-          "This is window title!"
+          "Adaptive Alarm Clock"
         )
       ),
       _react2.default.createElement(

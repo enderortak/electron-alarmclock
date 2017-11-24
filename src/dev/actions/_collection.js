@@ -11,6 +11,7 @@ export const ALARM_STATE = {
 
 export const clockTick = () => ({ type: CLOCK_TICK });
 export const setAlarmState = state => ({ type: SET_ALARM_STATE, state });
-export const setalarmSetTime = (alarmSetTime, maxTime) => ({ type: SET_ALARM_TIME, alarmSetTime, maxTime });
+export const setalarmSetTime = (alarmSetTime, maxTime) =>
+  ({ type: SET_ALARM_TIME, alarmSetTime, maxTime });
 export const snoozeAlarm = (actualTime, snoozeSetTime) =>
   ({ type: SNOOZE_ALARM, snoozeSetTime, actualTime });

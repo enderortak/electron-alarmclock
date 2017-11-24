@@ -3,7 +3,8 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducerCollection from "../reducers/_collection";
 import subscriptionCollection from "../subscriptions/_collection";
-import Clock from "../containers/Clock";
+import AlarmClock from "../containers/AlarmClock";
+
 
 const store = createStore(reducerCollection);
 
@@ -15,7 +16,7 @@ store.subscribe(() => {
 
 const ViewApp = () => (
   <Provider store={store}>
-    <Clock />
+    <AlarmClock />
   </Provider>
 );
 

@@ -16,6 +16,7 @@
   "dependencies": {
     "chai": "^4.1.2",
     "chai-moment": "^0.1.0",
+    "classnames": "^2.2.5",
     "electron": "^1.7.9",
     "electron-connect": "^0.6.2",
     "mocha": "^4.0.1",

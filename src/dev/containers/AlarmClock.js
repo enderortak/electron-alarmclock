@@ -1,33 +1,27 @@
 import moment from "moment";
 import { connect } from "react-redux";
 import { clockTick, setalarmSetTime, snoozeAlarm, ALARM_STATE } from "../actions/_collection";
-import Clock from "../components/Clock";
+import Clock from "../components/AlarmClock";
+import { alarmSetTime, alarmMaxTime, alarmSnooze, alarmSoundFile } from "../appSettings";
 
-
-const alarmSetTime = moment("2017-11-23").add(7, "hours").add(15, "minutes");
-const alarmMaxTime = moment("2017-11-23").add(7, "hours").add(45, "minutes");
-const alarmSnooze = null;
-
-// const alarmSetTime = moment().clone().add(5, "seconds");
-// const alarmMaxTime = moment().clone().add(35, "seconds");
-// const alarmSnooze = undefined;
 
 const alarmSetTimeDisplay = (state) => {
   if (state.alarm.alarmSetTime) {
     switch (state.alarm.state) {
       case ALARM_STATE.OFF: return "Alarm turned off";
       case ALARM_STATE.ON: return "Wake up!!!";
-      case ALARM_STATE.WAITING: return `Alarm time: ${state.alarm.alarmSetTime.format("DD.MM.YYYY HH:mm:ss")}`;
-      case ALARM_STATE.SNOOZED: return `Alarm time: ${state.alarm.alarmSetTime.format("DD.MM.YYYY HH:mm:ss")}, Snoozed until: ${state.alarm.snoozeSetTime.format("DD.MM.YYYY HH:mm:ss")}`;
+      case ALARM_STATE.WAITING: return `Alarm time: ${state.alarm.alarmSetTime.format("HH:mm:ss")}`;
+      case ALARM_STATE.SNOOZED: return `Alarm time: ${state.alarm.alarmSetTime.format("HH:mm:ss")}, Snoozed until: ${state.alarm.snoozeSetTime.format("HH:mm:ss")}`;
       default: return "";
     }
   } else return "Alarm not set";
 };
 
 const mapStateToProps = state => ({
-  timeDisplay: state.time.format("DD.MM.YYYY HH:mm:ss"),
+  timeDisplay: state.time.format("HH:mm:ss"),
   alarmSetTimeDisplay: alarmSetTimeDisplay(state),
   alarmState: state.alarm.state,
+  alarmSoundFile,
 });
 
 const mapDispatchToProps = (dispatch) => {

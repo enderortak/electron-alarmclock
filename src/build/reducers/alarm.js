@@ -6,15 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _moment = require("moment");
-
-var _moment2 = _interopRequireDefault(_moment);
-
 var _collection = require("../actions/_collection");
 
 var _adaptiveSnoozeCalculator = require("../internal/adaptiveSnoozeCalculator");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const alamInitState = {
   active: false,

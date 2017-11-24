@@ -18434,12 +18434,12 @@
 	        _react2.default.createElement(
 	          "div",
 	          null,
-	          _react2.default.createElement("i", { className: "fa fa-github fa-lg", "aria-hidden": "true" })
+	          _react2.default.createElement("i", { className: "fa fa-clock-o fa-lg", "aria-hidden": "true" })
 	        ),
 	        _react2.default.createElement(
 	          "div",
 	          null,
-	          "This is window title!"
+	          "Adaptive Alarm Clock"
 	        )
 	      ),
 	      _react2.default.createElement(
@@ -19180,9 +19180,9 @@
 
 	var _collection4 = _interopRequireDefault(_collection3);
 
-	var _Clock = __webpack_require__(197);
+	var _AlarmClock = __webpack_require__(197);
 
-	var _Clock2 = _interopRequireDefault(_Clock);
+	var _AlarmClock2 = _interopRequireDefault(_AlarmClock);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19197,7 +19197,7 @@
 	const ViewApp = () => _react2.default.createElement(
 	  _reactRedux.Provider,
 	  { store: store },
-	  _react2.default.createElement(_Clock2.default, null)
+	  _react2.default.createElement(_AlarmClock2.default, null)
 	);
 
 	exports.default = ViewApp;
@@ -37774,15 +37774,9 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _moment = __webpack_require__(73);
-
-	var _moment2 = _interopRequireDefault(_moment);
-
 	var _collection = __webpack_require__(193);
 
 	var _adaptiveSnoozeCalculator = __webpack_require__(195);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	const alamInitState = {
 	  active: false,
@@ -37897,19 +37891,13 @@
 
 	var _collection = __webpack_require__(193);
 
-	var _Clock = __webpack_require__(198);
+	var _AlarmClock = __webpack_require__(198);
 
-	var _Clock2 = _interopRequireDefault(_Clock);
+	var _AlarmClock2 = _interopRequireDefault(_AlarmClock);
+
+	var _appSettings = __webpack_require__(201);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	const alarmSetTime = (0, _moment2.default)("2017-11-23").add(7, "hours").add(15, "minutes");
-	const alarmMaxTime = (0, _moment2.default)("2017-11-23").add(7, "hours").add(45, "minutes");
-	const alarmSnooze = null;
-
-	// const alarmSetTime = moment().clone().add(5, "seconds");
-	// const alarmMaxTime = moment().clone().add(35, "seconds");
-	// const alarmSnooze = undefined;
 
 	const alarmSetTimeDisplay = state => {
 	  if (state.alarm.alarmSetTime) {
@@ -37919,9 +37907,9 @@
 	      case _collection.ALARM_STATE.ON:
 	        return "Wake up!!!";
 	      case _collection.ALARM_STATE.WAITING:
-	        return `Alarm time: ${state.alarm.alarmSetTime.format("DD.MM.YYYY HH:mm:ss")}`;
+	        return `Alarm time: ${state.alarm.alarmSetTime.format("HH:mm:ss")}`;
 	      case _collection.ALARM_STATE.SNOOZED:
-	        return `Alarm time: ${state.alarm.alarmSetTime.format("DD.MM.YYYY HH:mm:ss")}, Snoozed until: ${state.alarm.snoozeSetTime.format("DD.MM.YYYY HH:mm:ss")}`;
+	        return `Alarm time: ${state.alarm.alarmSetTime.format("HH:mm:ss")}, Snoozed until: ${state.alarm.snoozeSetTime.format("HH:mm:ss")}`;
 	      default:
 	        return "";
 	    }
@@ -37929,14 +37917,15 @@
 	};
 
 	const mapStateToProps = state => ({
-	  timeDisplay: state.time.format("DD.MM.YYYY HH:mm:ss"),
+	  timeDisplay: state.time.format("HH:mm:ss"),
 	  alarmSetTimeDisplay: alarmSetTimeDisplay(state),
-	  alarmState: state.alarm.state
+	  alarmState: state.alarm.state,
+	  alarmSoundFile: _appSettings.alarmSoundFile
 	});
 
 	const mapDispatchToProps = dispatch => {
 	  let intervalId;
-	  dispatch((0, _collection.setalarmSetTime)(alarmSetTime, alarmMaxTime));
+	  dispatch((0, _collection.setalarmSetTime)(_appSettings.alarmSetTime, _appSettings.alarmMaxTime));
 	  return {
 	    clockStart: () => {
 	      intervalId = setInterval(() => {
@@ -37948,12 +37937,12 @@
 	    },
 	    // snoozeAlarm: () => { dispatch(snoozeAlarm(moment().add(5, "minutes"))); }
 	    snoozeAlarm: () => {
-	      dispatch((0, _collection.snoozeAlarm)((0, _moment2.default)(), alarmSnooze ? (0, _moment2.default)().clone().add(alarmSnooze, "minutes") : null));
+	      dispatch((0, _collection.snoozeAlarm)((0, _moment2.default)(), _appSettings.alarmSnooze ? (0, _moment2.default)().clone().add(_appSettings.alarmSnooze, "minutes") : null));
 	    }
 	  };
 	};
 
-	const ClockContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Clock2.default);
+	const ClockContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AlarmClock2.default);
 
 	exports.default = ClockContainer;
 
@@ -37975,65 +37964,227 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
+	var _classnames = __webpack_require__(199);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
 	var _collection = __webpack_require__(193);
+
+	var _ClockDisplay = __webpack_require__(200);
+
+	var _ClockDisplay2 = _interopRequireDefault(_ClockDisplay);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	class Clock extends _react2.default.Component {
+	const snoozeButton = (isAlarmOn, snoozeAlarm) => isAlarmOn && _react2.default.createElement(
+	  "button",
+	  { className: "ui secondary button", onClick: snoozeAlarm },
+	  "Snooze Alarm"
+	);
+
+	const audio = (isAlarmOn, alarmSoundFile) => isAlarmOn && _react2.default.createElement(
+	  "audio",
+	  { autoPlay: true, loop: true },
+	  _react2.default.createElement("source", { src: alarmSoundFile, type: "audio/mpeg" })
+	);
+
+	class AlarmClock extends _react2.default.Component {
 	  componentDidMount() {
 	    this.props.clockStart();
 	  }
 	  componentWillUnmount() {
 	    this.props.clockStop();
 	  }
-	  audio() {
-	    return this.props.alarmState === _collection.ALARM_STATE.ON ? _react2.default.createElement(
-	      "audio",
-	      { autoPlay: true, loop: true },
-	      _react2.default.createElement("source", { src: "assets/audio/alarm-sound.wav", type: "audio/mpeg" })
-	    ) : "";
-	  }
 	  render() {
+	    const isAlarmOn = this.props.alarmState === _collection.ALARM_STATE.ON;
 	    return _react2.default.createElement(
 	      "div",
 	      {
-	        className: "clock flex-container",
-	        style: {
-	          background: this.props.alarmState === _collection.ALARM_STATE.ON ? "red" : "none"
-	        },
-	        onClick: this.props.snoozeAlarm,
+	        className: (0, _classnames2.default)("clock flex-container", { "alarm-on": isAlarmOn }),
 	        onKeyDown: this.props.snoozeAlarm
 	      },
 	      _react2.default.createElement(
 	        "div",
 	        null,
+	        _react2.default.createElement(_ClockDisplay2.default, { time: this.props.timeDisplay }),
 	        _react2.default.createElement(
 	          "div",
 	          null,
 	          this.props.alarmSetTimeDisplay
 	        ),
-	        _react2.default.createElement("br", null),
-	        _react2.default.createElement(
-	          "div",
-	          null,
-	          this.props.timeDisplay
-	        )
+	        snoozeButton(isAlarmOn, this.props.snoozeAlarm)
 	      ),
-	      this.audio()
+	      audio(isAlarmOn, this.props.alarmSoundFile)
 	    );
 	  }
 	}
 
-	Clock.propTypes = {
+	AlarmClock.propTypes = {
 	  clockStart: _propTypes2.default.func.isRequired,
 	  clockStop: _propTypes2.default.func.isRequired,
 	  alarmState: _propTypes2.default.string.isRequired,
 	  snoozeAlarm: _propTypes2.default.func.isRequired,
 	  alarmSetTimeDisplay: _propTypes2.default.string.isRequired,
-	  timeDisplay: _propTypes2.default.string.isRequired
+	  timeDisplay: _propTypes2.default.string.isRequired,
+	  alarmSoundFile: _propTypes2.default.string.isRequired
 	};
 
-	exports.default = Clock;
+	exports.default = AlarmClock;
+
+/***/ }),
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ }),
+/* 200 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(29);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	const numberAsText = number => ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"][number];
+
+	const ClockDigit = value => _react2.default.createElement(
+	  "div",
+	  { className: `digit ${numberAsText(value)}` },
+	  [...Array(7)].map((e, i) => _react2.default.createElement("div", { className: "unit", key: i }))
+	);
+	const ClockDisplay = ({ time }) => {
+	  const timeAsArray = time.split(":").map(e => [parseInt(e.substring(0, 1), 10), parseInt(e.substring(1, 2), 10)]);
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "clock-display" },
+	    ClockDigit(timeAsArray[0][0]),
+	    ClockDigit(timeAsArray[0][1]),
+	    _react2.default.createElement(
+	      "div",
+	      { className: "divider" },
+	      ":"
+	    ),
+	    ClockDigit(timeAsArray[1][0]),
+	    ClockDigit(timeAsArray[1][1]),
+	    _react2.default.createElement(
+	      "div",
+	      { className: "divider" },
+	      ":"
+	    ),
+	    ClockDigit(timeAsArray[2][0]),
+	    ClockDigit(timeAsArray[2][1]),
+	    _react2.default.createElement("div", { className: "debug", id: "debug" })
+	  );
+	};
+
+	ClockDisplay.propTypes = {
+	  time: _propTypes2.default.string.isRequired
+	};
+
+	exports.default = ClockDisplay;
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.alarmSnooze = exports.alarmMaxTime = exports.alarmSetTime = exports.alarmSoundFile = undefined;
+
+	var _moment = __webpack_require__(73);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _timeUtils = __webpack_require__(202);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	const alarmSoundFile = exports.alarmSoundFile = "assets/audio/alarm-sound.wav2";
+	// const alarmSetTime = getNextTime("11:41:00");
+	// const alarmMaxTime = getNextTime("11:42:00");
+	// const alarmSnooze = null;
+
+	const alarmSetTime = exports.alarmSetTime = (0, _moment2.default)().clone().add(5, "seconds");
+	const alarmMaxTime = exports.alarmMaxTime = (0, _moment2.default)().clone().add(35, "seconds");
+	const alarmSnooze = exports.alarmSnooze = undefined;
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	const moment = __webpack_require__(73);
+
+	const getNextTime = (timeString, actualTime) => {
+	  const _actualTime = actualTime || moment();
+	  return _actualTime.clone().startOf("day").add(moment.duration(timeString)).isAfter(_actualTime) ? _actualTime.clone().startOf("day").add(moment.duration(timeString)) : _actualTime.clone().startOf("day").add(moment.duration(timeString)).add(1, "days");
+	};
+
+	exports.getNextTime = getNextTime;
 
 /***/ })
 /******/ ]);

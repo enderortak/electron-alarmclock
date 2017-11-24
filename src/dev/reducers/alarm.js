@@ -1,4 +1,3 @@
-import moment from "moment";
 import { SET_ALARM_STATE, SET_ALARM_TIME, SNOOZE_ALARM, ALARM_STATE } from "../actions/_collection";
 import { calculateSnoozeZone, calculateSnoozeTimeSpan } from "../internal/adaptiveSnoozeCalculator";
 

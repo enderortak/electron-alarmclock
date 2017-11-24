@@ -20,9 +20,9 @@ var _collection3 = require("../subscriptions/_collection");
 
 var _collection4 = _interopRequireDefault(_collection3);
 
-var _Clock = require("../containers/Clock");
+var _AlarmClock = require("../containers/AlarmClock");
 
-var _Clock2 = _interopRequireDefault(_Clock);
+var _AlarmClock2 = _interopRequireDefault(_AlarmClock);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37,7 +37,7 @@ store.subscribe(() => {
 const ViewApp = () => _react2.default.createElement(
   _reactRedux.Provider,
   { store: store },
-  _react2.default.createElement(_Clock2.default, null)
+  _react2.default.createElement(_AlarmClock2.default, null)
 );
 
 exports.default = ViewApp;

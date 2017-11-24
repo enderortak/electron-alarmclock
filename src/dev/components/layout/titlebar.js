@@ -35,8 +35,8 @@ export default class TitleBar extends React.Component {
     return (
       <div id="titlebar">
         <div id="titlebar-windowtitle">
-          <div><i className="fa fa-github fa-lg" aria-hidden="true" /></div>
-          <div>This is window title!</div>
+          <div><i className="fa fa-clock-o fa-lg" aria-hidden="true" /></div>
+          <div>Adaptive Alarm Clock</div>
         </div>
         <div id="titlebar-actions">
           <div id="minimize-window" onClick={() => window().minimize()}>

@@ -1,7 +1,7 @@
 const url = require('url');
 const path = require('path');
 const { BrowserWindow, app, createWindow } = require('electron');
-const { client } = require('electron-connect');
+const { client } = require('electron-connect');// remove for publish
 
 let mainWindow;
 
@@ -24,7 +24,7 @@ app.on('ready', () => {
   mainWindow.on("unmaximize", () => { mainWindow.webContents.send("restore"); });
   mainWindow.once('ready-to-show', () => { mainWindow.show(); /* win.webContents.openDevTools(); */ });
   mainWindow.on('closed', () => { mainWindow = null; });
-  client.create(mainWindow);
+  client.create(mainWindow);// remove dor publish
 });
 
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') { app.quit(); } });
