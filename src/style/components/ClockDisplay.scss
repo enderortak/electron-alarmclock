@@ -1,0 +1,217 @@
+
+@mixin triangle( $direction, $color, $width, $height ) {
+  @extend %triangle-base;
+
+  @if $direction == 'n' {
+      border-width: 0 $width/2 $height;
+      border-bottom-color: $color;
+  } @else if $direction == 'e' {
+      border-width: $width/2 0 $width/2 $height;
+      border-left-color: $color;
+  } @else if $direction == 's' {
+      border-width: $height $width/2 0;
+      border-top-color: $color;
+} @else if $direction == 'w' {
+      border-width: $width/2 $height $width/2 0;
+      border-right-color: $color;
+  } @else if $direction == 'ne' {
+      border-width: $height 0 0 $width;
+      border-top-color: $color;
+  } @else if $direction == 'se' {
+      border-width: 0 0 $height $width;
+      border-bottom-color: $color;
+  } @else if $direction == 'sw' {
+      border-width: 0 $width $height 0;
+      border-bottom-color: $color;
+  } @else if $direction == 'nw' {
+      border-width: $height $width 0 0;
+      border-top-color: $color;
+  }
+}
+%triangle-base {
+  display: inline-block;
+  height:  0;
+  width:   0;
+padding: 0;
+
+// In case this holds text
+overflow: hidden;
+text-indent: 100%;
+
+  border-style: solid;
+  border-color: transparent;
+}
+
+
+$color: #0f0;
+$color_off: rgba($color, .1);
+$height: 3em;
+$width: $height / 6; //Make sure to use an even number
+
+
+$height_total: $height + (2 * $width);
+.clock-display{
+  font-size: .5em;
+  height: ($height_total * 2 + $width * 3);
+}
+#debug {color:$color}
+
+.divider {
+  font-family: sans-serif;
+  line-height: 1.15em;
+  color: $color;
+  font-size: $height * 2;
+  float: left;
+  margin: 0;
+}
+
+.digit {
+  margin: 0 $height/2 0 $height/2;
+  position: relative;
+  float: left;
+  width: $height_total + $width * 2;
+  height: $height_total * 2 + $width * 3;
+  
+  .unit:nth-child(2n){
+    transform: rotateZ(90deg);
+    left: $height_total/2;
+  }
+  
+  .unit:nth-child(1){
+    top:  $width/2;
+    left: 0;
+  }
+  
+  .unit:nth-child(7){
+    top:  $width/2;
+    left: $height_total;
+  }
+  
+  .unit:nth-child(3){
+    top:  ($width/2) + $height_total;
+    left: 0;
+  } 
+  
+  .unit:nth-child(5){
+    top:  ($width/2) + $height_total;
+    left: $height + ($width * 2);
+  }
+  
+  .unit:nth-child(2){
+    top: -$height_total/2 + $width/2;
+  }  
+  
+  .unit:nth-child(4){
+    top: ($height_total/2) + ($width/2);
+  }  
+  
+  .unit:nth-child(6){
+    top: (3/2 * $height_total) + $width/2;
+  }
+  
+  &.zero {
+    .unit:nth-child(4n){
+      @extend %unit--off;
+    }
+  }
+  
+  &.one {
+    .unit:nth-child(1),
+    .unit:nth-child(3),
+    .unit:nth-child(2),
+    .unit:nth-child(4),
+    .unit:nth-child(6){
+      @extend %unit--off;
+    }
+  }
+  
+  &.two {
+    .unit:nth-child(4n+1){
+      @extend %unit--off;
+    }
+  }
+  
+  &.three {
+    .unit:nth-child(1),
+    .unit:nth-child(3){
+      @extend %unit--off;
+    }
+  }
+  
+  &.four {
+    .unit:nth-child(2),
+    .unit:nth-child(3),
+    .unit:nth-child(6){
+      @extend %unit--off;
+    }
+  }
+  
+  &.five {
+    .unit:nth-child(4n+3){
+      @extend %unit--off;
+    }
+  }
+  
+  &.six {
+    .unit:nth-child(7n){
+      @extend %unit--off;
+    }
+  }
+  
+  &.seven {
+    .unit:nth-child(1),
+    .unit:nth-child(3),
+    .unit:nth-child(4),
+    .unit:nth-child(6){
+      @extend %unit--off;
+    }
+  }
+  
+  &.eight {
+    // No change
+  }
+  
+  &.nine {
+    .unit:nth-child(3n){
+      @extend %unit--off;
+    }
+  }
+}
+
+%unit--off {
+  //display: none;
+  background: $color_off;
+  color: $color_off;
+  box-shadow: none;
+}
+
+.unit {
+  position: absolute;
+  top:0;
+  left:0;
+  
+  width: $width;
+  height: $height;
+  background: $color;
+  color: $color;
+  box-shadow: 0 0 1em $color;
+  
+  &::before {
+    @include triangle('n', inherit, $width, $width/2);
+    
+    content: '';
+    
+    position: absolute;
+    top:-$width/2;
+    left:0;
+  }
+  &::after {
+    @include triangle('s', inherit, $width, $width/2);
+    
+    content: '';
+    
+    position: absolute;
+    bottom:-$width/2;
+    left:0;
+  }
+}

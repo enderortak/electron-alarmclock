@@ -1,0 +1,28 @@
+@import "../mixins";
+.alarm-clock{
+    color: white;
+    @include flex-container(row, center, center);
+    @include flex-item();
+    text-align: center;
+    
+    -webkit-line-break: pre-line;
+    & > div > div{
+        padding: 1em;
+    }
+}
+
+.alarm-on {
+  animation: alarm-on 0.99s infinite;  /* Safari 4+ */
+}
+
+@keyframes alarm-on {
+  0%, 33% {
+    background-color: none;
+  }
+  34%, 66% {
+    background-color: #ad0000;
+  }
+  66%, 100% {
+    background-color: none;
+  }
+}

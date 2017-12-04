@@ -1,0 +1,21 @@
+@mixin flex-container($flex-direction, $justify-content, $align-items, $flex-wrap: nowrap, $align-content: flex-start){
+    display: flex;
+    flex-direction: $flex-direction; // row, row-reverse, column, column-reverse
+    flex-wrap: $flex-wrap; // nowrap, wrap, wrap-reverse
+    justify-content: $justify-content; // primary axis alignment: flex-start, flex-end, center, space-between, space-around
+    align-items: $align-items; // secondary axis alignment: stretch, flex-start, flex-end, center, baseline
+    align-content: $align-content; // only effects to multi-line (wrapped) flex content: stretch, flex-start, flex-end, center, space-between, space-around
+}
+
+@mixin flex-item($flex-grow:1, $flex-shrink:1, $flex-basis:0){
+  flex-grow: $flex-grow; // this means that the div will grow in same proportion as the window-size
+  flex-shrink: $flex-shrink; // this means that the div will shrink in same proportion as the window-size 
+  flex-basis : $flex-basis; // this means that the div does not have a starting value as such and will take up screen as per the screen size available for.e.g:- if 3 divs are in the wrapper then each div will take 33%.
+}
+
+@mixin text-glow($color){
+  text-shadow: 
+  0 0 10px $color,
+  0 0 20px $color,
+  0 0 30px $color;
+}

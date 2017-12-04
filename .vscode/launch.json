@@ -12,8 +12,11 @@
     "--timeout",
     "999999",
     "--colors",
-    "${workspaceFolder}/src/test/**/*.js"
+    "${workspaceFolder}/test/**/*.js",
+    "--require",
+    "babel-core/register"
   ],
+  "env": { "NODE_ENV": "development"},
   "internalConsoleOptions": "openOnSessionStart"
 }
   ],

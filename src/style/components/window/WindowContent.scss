@@ -1,0 +1,11 @@
+@import "../../mixins";
+#window-content{
+    @include flex-container(row, stretch, stretch);
+    @include flex-item();
+    padding: 1rem;
+
+    #content{
+        overflow: auto;
+    }
+    
+}
